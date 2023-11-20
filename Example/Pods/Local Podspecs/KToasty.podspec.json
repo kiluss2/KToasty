@@ -1,0 +1,22 @@
+{
+  "name": "KToasty",
+  "version": "0.1.0",
+  "summary": "A short description of KToasty.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Lê Văn Sơn/KToasty",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Lê Văn Sơn": "135940142+sonlvfox@users.noreply.github.com"
+  },
+  "source": {
+    "git": "https://github.com/Lê Văn Sơn/KToasty.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "KToasty/Classes/**/*"
+}
