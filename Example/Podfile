@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '12.0'
+
+target 'KToasty_Example' do
+  pod 'KToasty', :path => '../'
+
+  target 'KToasty_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

@@ -1,0 +1,6 @@
+framework module Pods_KToasty_Example {
+  umbrella header "Pods-KToasty_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

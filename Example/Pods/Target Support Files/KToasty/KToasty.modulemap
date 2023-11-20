@@ -1,0 +1,6 @@
+framework module KToasty {
+  umbrella header "KToasty-umbrella.h"
+
+  export *
+  module * { export * }
+}
