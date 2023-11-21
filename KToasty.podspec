@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'KToasty'
   s.version          = '1.0.0'
-  s.summary          = 'A toast library for ios.'
+  s.summary          = 'A simple and customizable toast library for iOS.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ TODO: Add long description of the pod here.
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'KiluSs' => 'kiluss2@gmail.com' }
-  s.source           = { :git => 'https://github.com/kiluss2/KToasty.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/kiluss2/KToasty.git', :branch => 'master', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   s.swift_version = '5.0'
   s.ios.deployment_target = '12.0'
