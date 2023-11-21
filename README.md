@@ -5,11 +5,13 @@
 [![License](https://img.shields.io/cocoapods/l/KToasty.svg?style=flat)](https://cocoapods.org/pods/KToasty)
 [![Platform](https://img.shields.io/cocoapods/p/KToasty.svg?style=flat)](https://cocoapods.org/pods/KToasty)
 
-## Example
+## Introduction
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+KToasty is a lightweight and customizable toast library for iOS applications. It provides a simple way to display informative messages in your app.
 
 ## Requirements
+
+- iOS 12.0+
 
 ## Installation
 
@@ -17,8 +19,46 @@ KToasty is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'KToasty', :git => 'git@github.com:kiluss2/KToasty.git', :branch => 'master'
+pod 'KToasty'
 ```
+
+## Usage
+
+Display a Simple Toast
+To display a simple toast message, instantiate a Toasty object and call the show method:
+```swift
+import KToasty
+
+let toasty = Toasty(message: "Hello World!", sender: self)
+toasty.show()
+```
+### Customize Toast Duration and Style
+You can customize the duration of the toast and its visual style:
+```swift
+let toasty = Toasty(message: "Customized Toast", sender: self, style: .success)
+toasty.show(duration: .long)
+```
+### Specify Toast Position
+You can specify whether the toast should appear at the top or bottom of the screen:
+
+```swift
+let toasty = Toasty(message: "Top Toast", sender: self)
+toasty.show(position: .top)
+```
+### Show Toast in Queue
+To show toasts in a queue, use the ShowMode.queue option:
+
+```swift
+let toasty1 = Toasty(message: "Toast 1", sender: self)
+let toasty2 = Toasty(message: "Toast 2", sender: self)
+
+toasty1.show(showMode: .queue)
+toasty2.show(showMode: .queue)
+```
+
+## Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Author
 
