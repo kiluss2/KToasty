@@ -50,7 +50,7 @@ public final class Toasty {
     
     public typealias ToastCompletionHandler = (() -> Void)?
     fileprivate weak var sender: UIViewController?
-    fileprivate let message: String
+    fileprivate var message: NSMutableAttributedString
     fileprivate var completionHandler: ToastCompletionHandler = nil
     fileprivate let toastView: ToastView
     fileprivate var duration: Duration = .short
@@ -64,7 +64,19 @@ public final class Toasty {
     ///   - style: The visual style of the toast, indicating its appearance and purpose. Defaults to .info.
     public init(message: String, sender: UIViewController?, style: Style = .info) {
         self.sender = sender
-        self.message = message
+        self.message = NSMutableAttributedString(string: message)
+        self.toastView =  ToastView(message: self.message, style: style)
+    }
+    
+    /// Initializes a new instance of the Toasty library to display a toast message.
+    ///
+    /// - Parameters:
+    ///   - messageAttribuleString: The NSMutableAttributedString message to be displayed in the toast.
+    ///   - sender: The UIViewController from which the toast should be presented.
+    ///   - style: The visual style of the toast, indicating its appearance and purpose. Defaults to .info.
+    public init(messageAttribuleString: NSMutableAttributedString, sender: UIViewController?, style: Style = .info) {
+        self.sender = sender
+        self.message = messageAttribuleString
         self.toastView =  ToastView(message: message, style: style)
     }
     
@@ -94,7 +106,7 @@ public final class Toasty {
 fileprivate class ToastView: UIView {
     private var messageLabel: UILabel!
     
-    init(message: String, style: Toasty.Style) {
+    init(message: NSMutableAttributedString, style: Toasty.Style) {
         super.init(frame: CGRect.zero)
         configureUI(message: message, style: style)
     }
@@ -103,11 +115,11 @@ fileprivate class ToastView: UIView {
         super.init(coder: aDecoder)
     }
     
-    private func configureUI(message: String, style: Toasty.Style) {
+    private func configureUI(message: NSMutableAttributedString, style: Toasty.Style) {
         // Customize your toast view's appearance
         
         messageLabel = UILabel(frame: CGRect.zero)
-        messageLabel.text = message
+        messageLabel.attributedText = message
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .natural
         messageLabel.font = UIFont.boldSystemFont(ofSize: 16)

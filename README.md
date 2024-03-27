@@ -32,6 +32,20 @@ import KToasty
 let toasty = Toasty(message: "Hello World!", sender: self)
 toasty.show()
 ```
+You can also use NSMutableAttributedString to add some icon for ex:
+```swift
+import KToasty
+
+let attrString = NSMutableAttributedString(string:"Hi world!")
+
+let imageAttachment = NSTextAttachment()
+imageAttachment.image = UIImage(name: "wave")
+imageAttachment.bounds = CGRect(x: 0, y: -8, width: 25, height: 25)
+let imageString = NSAttributedString(attachment: imageAttachment)
+attrString.append(imageString)
+
+Toasty(messageAttribuleString: attrString, sender: self).show()
+```
 ### Customize Toast Duration and Style
 You can customize the duration of the toast and its visual style:
 ```swift
