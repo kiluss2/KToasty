@@ -1,5 +1,5 @@
 PODS:
-  - KToasty (0.1.0)
+  - KToasty (1.0.1)
 
 DEPENDENCIES:
   - KToasty (from `../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  KToasty: 860db409503d4b82b96cb6b097abb326843806f5
+  KToasty: 713013fab0ed56f366e6fccc9956646abd4dab89
 
 PODFILE CHECKSUM: ad0d25eaf6b002664a9fb828285d2e09d1cd0ad7
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.16.2

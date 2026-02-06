@@ -1,22 +1,25 @@
 {
   "name": "KToasty",
-  "version": "0.1.0",
-  "summary": "A short description of KToasty.",
+  "version": "1.0.1",
+  "summary": "A simple and customizable toast library for iOS.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Lê Văn Sơn/KToasty",
+  "homepage": "https://github.com/kiluss2/KToasty",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "Lê Văn Sơn": "135940142+sonlvfox@users.noreply.github.com"
+    "KiluSs": "kiluss2@gmail.com"
   },
   "source": {
-    "git": "https://github.com/Lê Văn Sơn/KToasty.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/kiluss2/KToasty.git",
+    "branch": "master",
+    "tag": "1.0.1"
   },
+  "swift_versions": "5.0",
   "platforms": {
-    "ios": "10.0"
+    "ios": "12.0"
   },
-  "source_files": "KToasty/Classes/**/*"
+  "source_files": "KToasty/Classes/**/*",
+  "swift_version": "5.0"
 }
