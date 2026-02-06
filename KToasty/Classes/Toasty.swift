@@ -79,6 +79,26 @@ public final class Toasty {
         self.message = messageAttribuleString
         self.toastView =  ToastView(message: message, style: style)
     }
+
+    /// Initializes a new instance of the Toasty library to display a toast message on top of the screen window.
+    ///
+    /// - Parameters:
+    ///   - message: The message to be displayed in the toast.
+    ///   - style: The visual style of the toast, indicating its appearance and purpose. Defaults to .info.
+    public init(message: String, style: Style = .info) {
+        self.message = NSMutableAttributedString(string: message)
+        self.toastView = ToastView(message: self.message, style: style)
+    }
+
+    /// Initializes a new instance of the Toasty library to display a toast message on top of the screen window.
+    ///
+    /// - Parameters:
+    ///   - messageAttribuleString: The NSMutableAttributedString message to be displayed in the toast.
+    ///   - style: The visual style of the toast, indicating its appearance and purpose. Defaults to .info.
+    public init(messageAttribuleString: NSMutableAttributedString, style: Style = .info) {
+        self.message = messageAttribuleString
+        self.toastView = ToastView(message: message, style: style)
+    }
     
     /// Show the toast for a specified duration. (Default is `.short`)
     ///
@@ -170,6 +190,26 @@ final fileprivate class ToastManager: ToastDelegate {
     private var currentToastDismissAction: DispatchWorkItem?
     private var toastViewMargin = CGFloat(20)
     
+    private lazy var window: UIWindow? = {
+        let win: UIWindow
+        if #available(iOS 13.0, *),
+           let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }) {
+            win = PassThroughToastWindow(windowScene: windowScene)
+        } else {
+            win = PassThroughToastWindow(frame: UIScreen.main.bounds)
+        }
+        let vc = UIViewController()
+        vc.view.backgroundColor = .clear
+        win.rootViewController = vc
+        win.windowLevel = UIWindow.Level.alert + 1
+        win.backgroundColor = .clear
+        win.isHidden = false
+        win.isUserInteractionEnabled = true
+        return win
+    }()
+    
     fileprivate func queueAndPresent(_ toast: Toasty) {
         queue.enqueue(toast)
         presentIfPossible()
@@ -205,31 +245,41 @@ final fileprivate class ToastManager: ToastDelegate {
     }
     
     fileprivate func presentIfPossible() {
-        guard isPresenting == false, let toast = queue.dequeue(), let sender = toast.sender else { return }
+        guard isPresenting == false, let toast = queue.dequeue() else { return }
         currentToast = toast
         isPresenting = true
-        presentToast(toast: toast, sender: sender)
+        presentToast(toast: toast)
     }
     
-    func presentToast(toast: Toasty, sender: UIViewController) {
+    func presentToast(toast: Toasty) {
         let toastView = toast.toastView
         let position = toast.position
         
+        let targetView: UIView
+        if let sender = toast.sender {
+            targetView = sender.view
+        } else {
+            // Setup window if needed
+            if window == nil { _ = window }
+            guard let win = window, let root = win.rootViewController?.view else { return }
+            targetView = root
+        }
+        
         var topConstraint = NSLayoutConstraint()
         var bottomConstraint = NSLayoutConstraint()
-        let leadingConstraint = toastView.leadingAnchor.constraint(greaterThanOrEqualTo: sender.view.leadingAnchor, constant: self.toastViewMargin)
-        let trailingConstraint = toastView.trailingAnchor.constraint(lessThanOrEqualTo: sender.view.trailingAnchor, constant: -self.toastViewMargin)
-        let centerConstraint = toastView.centerXAnchor.constraint(equalTo: sender.view.centerXAnchor)
+        let leadingConstraint = toastView.leadingAnchor.constraint(greaterThanOrEqualTo: targetView.leadingAnchor, constant: self.toastViewMargin)
+        let trailingConstraint = toastView.trailingAnchor.constraint(lessThanOrEqualTo: targetView.trailingAnchor, constant: -self.toastViewMargin)
+        let centerConstraint = toastView.centerXAnchor.constraint(equalTo: targetView.centerXAnchor)
         let widthConstraint = toastView.widthAnchor.constraint(equalToConstant: 0)
         let heightConstraint = toastView.heightAnchor.constraint(equalToConstant: 0)
         
         switch position {
         case .top:
-            topConstraint = toastView.topAnchor.constraint(equalTo: sender.view.safeAreaLayoutGuide.topAnchor, constant: -40)
-            bottomConstraint = toastView.bottomAnchor.constraint(lessThanOrEqualTo: sender.view.bottomAnchor, constant: -self.toastViewMargin)
+            topConstraint = toastView.topAnchor.constraint(equalTo: targetView.safeAreaLayoutGuide.topAnchor, constant: -40)
+            bottomConstraint = toastView.bottomAnchor.constraint(lessThanOrEqualTo: targetView.bottomAnchor, constant: -self.toastViewMargin)
         case .bottom:
-            topConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: sender.view.safeAreaLayoutGuide.topAnchor, constant: self.toastViewMargin)
-            bottomConstraint = toastView.bottomAnchor.constraint(equalTo: sender.view.safeAreaLayoutGuide.bottomAnchor, constant: 40)
+            topConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: targetView.safeAreaLayoutGuide.topAnchor, constant: self.toastViewMargin)
+            bottomConstraint = toastView.bottomAnchor.constraint(equalTo: targetView.safeAreaLayoutGuide.bottomAnchor, constant: 40)
         }
         
         DispatchQueue.main.async {
@@ -248,7 +298,7 @@ final fileprivate class ToastManager: ToastDelegate {
                     
                     widthConstraint.isActive = true
                     heightConstraint.isActive = true
-                    sender.view.layoutIfNeeded()
+                    targetView.layoutIfNeeded()
                 }, completion: { _ in
                     toastView.removeFromSuperview()
                     self.isPresenting = false
@@ -256,7 +306,7 @@ final fileprivate class ToastManager: ToastDelegate {
                 })
             }
             
-            sender.view.addSubview(toastView)
+            targetView.addSubview(toastView)
             toastView.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
@@ -266,7 +316,7 @@ final fileprivate class ToastManager: ToastDelegate {
                 widthConstraint,
                 heightConstraint
             ])
-            sender.view.layoutIfNeeded()
+            targetView.layoutIfNeeded()
             NSLayoutConstraint.deactivate([
                 widthConstraint,
                 heightConstraint
@@ -281,7 +331,7 @@ final fileprivate class ToastManager: ToastDelegate {
                 default:
                     topConstraint.constant = self.toastViewMargin
                 }
-                sender.view.layoutIfNeeded()
+                targetView.layoutIfNeeded()
             }, completion: { _ in
                 DispatchQueue.main.asyncAfter(deadline: .now() + toast.duration.length, execute: dismissAction)
                 self.currentToastDismissAction = dismissAction
@@ -307,5 +357,17 @@ private struct Queue<T> {
     
     mutating func clearQueue() {
         array.removeAll()
+    }
+}
+
+private class PassThroughToastWindow: UIWindow {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let hitView = super.hitTest(point, with: event) else { return nil }
+        // If the hit view is the window itself or the root view controller's view,
+        // (which are transparent), we return nil so that the touch passes through to the window below.
+        if hitView == self || hitView == rootViewController?.view {
+            return nil
+        }
+        return hitView
     }
 }

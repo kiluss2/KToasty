@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'KToasty'
-  s.version          = '1.0.1'
-  s.summary          = 'A simple and customizable toast library for iOS.'
+  s.version          = '1.1.0'
+  s.summary          = 'A simple and customizable toast library for iOS. Now supports Window overlay.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
