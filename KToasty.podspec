@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+KToasty is a lightweight, highly customizable toast library for iOS written in Swift. It provides an easy way to show brief messages to users with various styles (success, info, error) and positions. Version 1.1.0 introduces the ability to show toasts on a dedicated window overlay, which doesn't block underlying view interactions.
                        DESC
 
   s.homepage         = 'https://github.com/kiluss2/KToasty'
