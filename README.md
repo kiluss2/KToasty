@@ -24,50 +24,72 @@ pod 'KToasty'
 
 ## Usage
 
-Display a Simple Toast
-To display a simple toast message, instantiate a Toasty object and call the show method:
+### 1. Show via Window Overlay (New in 1.1.0)
+The recommended way to show toasts without depending on a specific `UIViewController`. It creates a pass-through window on top of everything.
+
+```swift
+import KToasty
+
+// Simple string
+Toasty(message: "Hello World!").show()
+
+// With custom style
+Toasty(message: "Success Message", style: .success).show()
+```
+
+### 2. Show via View Controller (Traditional)
+If you want the toast to be contained within a specific view controller's bounds.
+
 ```swift
 import KToasty
 
 let toasty = Toasty(message: "Hello World!", sender: self)
 toasty.show()
 ```
-You can also use NSMutableAttributedString to add some icon for ex:
+
+### 3. Using Attributed Strings
+You can use `NSMutableAttributedString` to include icons or rich text:
 ```swift
 import KToasty
 
-let attrString = NSMutableAttributedString(string:"Hi world!")
+let attrString = NSMutableAttributedString(string: "Hi world! ")
 
 let imageAttachment = NSTextAttachment()
-imageAttachment.image = UIImage(name: "wave")
-imageAttachment.bounds = CGRect(x: 0, y: -8, width: 25, height: 25)
-let imageString = NSAttributedString(attachment: imageAttachment)
-attrString.append(imageString)
+imageAttachment.image = UIImage(named: "wave")
+imageAttachment.bounds = CGRect(x: 0, y: -4, width: 20, height: 20)
+attrString.append(NSAttributedString(attachment: imageAttachment))
 
+// Via Window
+Toasty(messageAttribuleString: attrString).show()
+
+// Or via ViewController
 Toasty(messageAttribuleString: attrString, sender: self).show()
 ```
-### Customize Toast Duration and Style
-You can customize the duration of the toast and its visual style:
+
+### 4. Customization Options
+
+#### Duration and Style
+Available styles: `.info` (default), `.success`, `.error`.
+Available durations: `.short` (2s), `.average` (4s), `.long` (8s), `.custom(TimeInterval)`.
+
 ```swift
-let toasty = Toasty(message: "Customized Toast", sender: self, style: .success)
+let toasty = Toasty(message: "Customized Toast", style: .error)
 toasty.show(duration: .long)
 ```
-### Specify Toast Position
-You can specify whether the toast should appear at the top or bottom of the screen:
+
+#### Position
+Toasts can appear at the `.top` (default) or `.bottom` of the screen.
 
 ```swift
-let toasty = Toasty(message: "Top Toast", sender: self)
-toasty.show(position: .top)
+Toasty(message: "Bottom Toast").show(position: .bottom)
 ```
-### Show Toast in Queue
-To show toasts in a queue, use the ShowMode.queue option:
+
+#### Show Mode (Queue)
+By default, toasts show `.instantly` (dismissing the current one). Use `.queue` to wait for previous toasts to finish.
 
 ```swift
-let toasty1 = Toasty(message: "Toast 1", sender: self)
-let toasty2 = Toasty(message: "Toast 2", sender: self)
-
-toasty1.show(showMode: .queue)
-toasty2.show(showMode: .queue)
+Toasty(message: "Toast 1").show(.queue)
+Toasty(message: "Toast 2").show(.queue)
 ```
 
 ## Example
